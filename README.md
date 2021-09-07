@@ -26,6 +26,10 @@ Edit the script with filenames, and other preferences, then
 ./canmore_csv_to_gpx.py
 ```
 
+## Megalithic
+
+Use `megalithic.sh` to download and `megalithic_csv_to_gpx.py` to convert from csv to GPX.
+
 ## Note on EPSG codes
 
 British National Grid = BNG = OSGB 36 National Grid = EPSG: 27700
