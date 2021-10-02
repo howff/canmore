@@ -35,16 +35,17 @@ ofd = open(gpx_file, 'w')
 gpx_header(ofd)
 
 with open(csv_file) as fd:
+    # ngr|lat|lon|site
     rdr = csv.reader(fd, delimiter='|')
     rownum = 0
     for row in rdr:
         rownum += 1
         if rownum == 1:
-            hdr(ofd)
             continue
-        ll = osgr.parseOSGR(row[1]).toLatLon()
-        print('<wpt lat="%s" lon="%s">' % (ll[0], ll[1]), file=ofd)
-        print(' <name><![CDATA[%s]]></name>' % row[0], file=ofd)
+        #ll = osgr.parseOSGR(row[0]).toLatLon() # file now has lat,lon so no need for this
+        #print('<wpt lat="%s" lon="%s">' % (ll[0], ll[1]), file=ofd)
+        print('<wpt lat="%s" lon="%s">' % (row[1], row[2]), file=ofd)
+        print(' <name><![CDATA[%s]]></name>' % row[3], file=ofd)
         print(' <sym>Flag</sym>', file=ofd)
         print(' <type>Marks:Megalithic:%s</type>' % region_name, file=ofd)
         print('</wpt>', file=ofd)

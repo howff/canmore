@@ -47,11 +47,11 @@ mega_listing = mega_resp.read().decode(mega_encoding).splitlines()
 
 # ---------------------------------------------------------------------
 with open(csv_file, 'w') as fp:
-    print('site|ngr|lat|lon', file=fp)
+    print('ngr|lat|lon|site', file=fp)
     for line in mega_listing:
         # Look for lines like this:
         # &nbsp;11.1km SE 135&#x00B0; <a href="article.php?sid=3387">Melgum NW</a> Stone Circle (<i>NJ471053</i>)<br>
         m = re.search(r'article.php\?sid=[^"]*">(.*)</a> (.*) \(<i>(.*)</i>\)', line)
         if m:
             latlon = osgr.parseOSGR(m.group(3)).toLatLon()
-            print('%s|%s (%s)|%f|%f' % (m.group(3), m.group(1), m.group(2), latlon[0], latlon[1]), file=fp)
+            print('%s|%f|%f|%s (%s)' % (m.group(3), latlon[0], latlon[1], m.group(1), m.group(2)), file=fp)

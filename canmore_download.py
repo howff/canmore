@@ -26,7 +26,7 @@ def easting_northing_to_latlon(easting, northing):
 
 # ---------------------------------------------------------------------
 
-canmore_url = "https://canmore.org.uk/canmore_report/site/csv?SITECOUNTRY=1&LOCAT_XY_RADIUS_M=%d&LOCAT_X_COORD=%06d&LOCAT_Y_COORD=%06d&LOCAT_EXTENTTYPE=RADIUS&per_page=99999" % (int(radius*1000), int(gridref.easting), int(gridref.northing))
+canmore_url = "https://canmore.org.uk/canmore_report/site/csv?SITECOUNTRY=1&LOCAT_XY_RADIUS_M=%d&LOCAT_X_COORD=%06d&LOCAT_Y_COORD=%06d&LOCAT_EXTENTTYPE=RADIUS&per_page=99999" % (int(radius)*1000, int(gridref.easting), int(gridref.northing))
 
 
 print('Requesting %s' % canmore_url)

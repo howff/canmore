@@ -9,15 +9,15 @@ from pygeodesy import osgr
 import csv
 import sys
 
-region_name = sys.argv[1] # eg. 'Dundee'
-center_lat = sys.argv[2]  # eg. 56.45
-center_lon = sys.argv[3]  # eg. -2.97
-radius_km  = sys.argv[4]  # eg. 60
+region_name = sys.argv[1]        # eg. 'Dundee'
+center_lat = float(sys.argv[2])  # eg. 56.45
+center_lon = float(sys.argv[3])  # eg. -2.97
+radius_km  = float(sys.argv[4])  # eg. 60
 verbose = 1
 poi_csv_file = 'poi_extract_2021-06.csv'
 
 gpx_file = region_name + '_os-poi.gpx'
-gridref = osgr.toOsgr(lat, lon)
+gridref = osgr.toOsgr(center_lat, center_lon)
 center_easting  = gridref.easting  # eg. 340385.0 # Dundee
 center_northing = gridref.northing # eg. 730678.0
 radius = radius_km * 1000.0        # in m around the center point
@@ -169,8 +169,8 @@ with open(poi_csv_file) as fd:
         (lat,lon) = easting_northing_to_latlon(easting, northing)
         elev = 0
 
-        #kml_mark(name, desc, lat, lon, elev)
-        gpx_mark(name, desc, lat, lon, elev)
+        #kml_mark(ofd, name, desc, lat, lon, elev)
+        gpx_mark(ofd, name, desc, lat, lon, elev)
 
         num_records += 1
 

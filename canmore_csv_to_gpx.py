@@ -81,7 +81,7 @@ for group_name,group in gdf_grouped:
         continue
     for rowindex,row in group.iterrows():
         print(f'<wpt lat="{row.geometry.y}" lon="{row.geometry.x}">', file=fd)
-        print(f'<name><![CDATA[{row.SITENAME} [{row.SITETYPE}]]]></name>', file=fd)
+        print(f'<name><![CDATA[{row.sitename} [{row.sitetype}]]]></name>', file=fd)
         print('<sym>Flag</sym>', file=fd)
         print(f'<type>Marks:Canmore:{folder_name}:{group_name}</type>', file=fd)
         print('</wpt>', file=fd)
