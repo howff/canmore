@@ -1,13 +1,21 @@
 #!/usr/bin/env python3
+# Usage: location_name file.csv
+# writes output to file.gpx
+# The location_name is used by MemoryMap to put the marks into a folder
+#  Marks:Megalithic:location_name
 
 #from OSGridConverter import grid2latlong # Doesn't return correct lat,lon
 from pygeodesy import osgr
 import csv
 import sys
 
-region_name = 'Harris'
+location_name = sys.argv[1]
+csv_file = sys.argv[2]
+gpx_file = csv_file.replace('.csv','').replace('.CSV','')+'.gpx'
 
-def hdr(fd):
+region_name = location_name
+
+def gpx_header(fd):
     print("""<?xml version="1.0" encoding="UTF-8" ?>
 <gpx version="1.1"
 creator="Memory-Map 6.3.3.1261 https://memory-map.com"
@@ -15,11 +23,18 @@ creator="Memory-Map 6.3.3.1261 https://memory-map.com"
  xmlns="http://www.topografix.com/GPX/1/1"
  xmlns:xstyle="http://www.topografix.com/GPX/gpx_style/0/2"
  xmlns:xgarmin="http://www.garmin.com/xmlschemas/GpxExtensions/v3"
- xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.topografix.com/GPX/gpx_style/0/2 http://www.topografix.com/GPX/gpx_style/0/2/gpx_style.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 https://www8.garmin.com/xmlschemas/GpxExtensionsv3.xsd">""", file=fd)
+ xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.topografix.com/GPX/gpx_style/0/2 http://www.topografix.com/GPX/gpx_style/0/2/gpx_style.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 https://www8.garmin.com/xmlschemas/GpxExtensionsv3.xsd">""",
+    file=fd)
 
-ofd = sys.stdout
+def gpx_footer(fd):
+    print('</gpx>', file=fd)
 
-with open('megalithic.csv') as fd:
+
+ofd = open(gpx_file, 'w')
+
+gpx_header(ofd)
+
+with open(csv_file) as fd:
     rdr = csv.reader(fd, delimiter='|')
     rownum = 0
     for row in rdr:
@@ -27,12 +42,11 @@ with open('megalithic.csv') as fd:
         if rownum == 1:
             hdr(ofd)
             continue
-        #ll = grid2latlong(row[1])
-        #print('%s -> %s %s', (row[1], ll.latitude, ll.longitude))
         ll = osgr.parseOSGR(row[1]).toLatLon()
         print('<wpt lat="%s" lon="%s">' % (ll[0], ll[1]), file=ofd)
         print(' <name><![CDATA[%s]]></name>' % row[0], file=ofd)
         print(' <sym>Flag</sym>', file=ofd)
         print(' <type>Marks:Megalithic:%s</type>' % region_name, file=ofd)
         print('</wpt>', file=ofd)
-print('</gpx>', file=ofd)
+
+gpx_footer(ofd)
