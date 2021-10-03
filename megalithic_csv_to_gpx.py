@@ -30,6 +30,7 @@ def gpx_footer(fd):
     print('</gpx>', file=fd)
 
 
+print('Writing %s' % gpx_file)
 ofd = open(gpx_file, 'w')
 
 gpx_header(ofd)
