@@ -10,7 +10,8 @@ import sys
 location_name = sys.argv[1]
 lat = sys.argv[2]
 lon = sys.argv[3]
-radius = sys.argv[4] # km
+radius = float(sys.argv[4]) # km
+radius_m = int(radius * 1000)
 
 csv_file = location_name + '_canmore.csv'
 gridref = osgr.toOsgr(lat, lon)
@@ -26,7 +27,7 @@ def easting_northing_to_latlon(easting, northing):
 
 # ---------------------------------------------------------------------
 
-canmore_url = "https://canmore.org.uk/canmore_report/site/csv?SITECOUNTRY=1&LOCAT_XY_RADIUS_M=%d&LOCAT_X_COORD=%06d&LOCAT_Y_COORD=%06d&LOCAT_EXTENTTYPE=RADIUS&per_page=99999" % (int(radius)*1000, int(gridref.easting), int(gridref.northing))
+canmore_url = "https://canmore.org.uk/canmore_report/site/csv?SITECOUNTRY=1&LOCAT_XY_RADIUS_M=%d&LOCAT_X_COORD=%06d&LOCAT_Y_COORD=%06d&LOCAT_EXTENTTYPE=RADIUS&per_page=99999" % (radius_m, int(gridref.easting), int(gridref.northing))
 
 
 print('Requesting %s' % canmore_url)
