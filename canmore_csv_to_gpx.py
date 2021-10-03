@@ -9,6 +9,7 @@ import pandas as pd
 import re
 import sys
 
+verbose = 0
 location_name = sys.argv[1]
 csv_file = sys.argv[2]
 gpx_file = csv_file.replace('.csv','').replace('.CSV','')+'.gpx'
@@ -16,27 +17,65 @@ gpx_file = csv_file.replace('.csv','').replace('.CSV','')+'.gpx'
 folder_name = location_name
 
 wanted_groups = [
+        'Battle Site',
         'Blackhouse',
         'Broch',
         'Burial Cairn',
+        'Burial Ground',
         'Cairn',
+        'Castle',
         'Cave',
+        'Cemetery',
+        'Chain',
         'Chambered Cairn',
+        'Chapel',
+        'Church',
+        'Cinerary Urn',
         'Cist',
         'Clearance Cairn',
         'Cleit',
+        'Commemorative Monument',
         'Crannog',
+        'Cross Incised Stone',
         'Cross Slab',
         'Cup Marked Rock',
+        'Cup Marked Stone',
+        'Ditch Defined Cursus',
+        'Dovecot',
         'Dun',
+        'Fort',
+        'Geological Cropmark',
+        'Henge',
+        'Holy Well',
         'Hut Circle',
+        'Icehouse',
+        'Inscribed Stone',
+        'Kiln',
+        'Lade',
+        'Long Cairn',
         'Long Cist',
+        'Marker Cairn',
+        'Mausoleum',
+        'Motte',
+        'Mound',
+        'Natural Feature',
+        'Pictish Symbol Stone',
         'Promontory Fort',
+        'Recumbent Stone Circle',
+        'Reliquary',
+        'Rig And Furrow',
+        'Ring Cairn',
+        'Ring Ditch',
         'Rock Shelter',
         'Sheela Na Gig',
+        'Shieling Hut',
         'Souterrain',
         'Standing Stone',
-        'Township'
+        'Stone',
+        'Stone Ball',
+        'Stone Circle',
+        'Township',
+        'Well',
 ]
 
 def gpx_header(df):
@@ -70,6 +109,7 @@ gdf_grouped = gdf.groupby('type')
 
 # Output GPX
 
+print('Writing %s' % gpx_file)
 fd = open(gpx_file, 'w')
 
 gpx_header(fd)
@@ -78,6 +118,7 @@ gpx_header(fd)
 
 for group_name,group in gdf_grouped:
     if group_name not in wanted_groups:
+        if verbose: print('Ignore group "%s"' % group_name)
         continue
     for rowindex,row in group.iterrows():
         print(f'<wpt lat="{row.geometry.y}" lon="{row.geometry.x}">', file=fd)
