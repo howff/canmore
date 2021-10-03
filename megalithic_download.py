@@ -36,7 +36,7 @@ if not mega_nearby_match:
     exit(1)
 
 # ---------------------------------------------------------------------
-mega_nearby_url = "https://www.megalithic.co.uk/" + mega_nearby_match.group(1)
+mega_nearby_url = "https://www.megalithic.co.uk/" + mega_nearby_match.group(1).replace('#nearby','').replace('&amp;','&')
 print('Requesting URL %s' % mega_nearby_url)
 mega_req = urllib.request.Request(mega_nearby_url)
 mega_req.add_header('Referer', mega_url)
@@ -48,10 +48,13 @@ mega_listing = mega_resp.read().decode(mega_encoding).splitlines()
 # ---------------------------------------------------------------------
 with open(csv_file, 'w') as fp:
     print('ngr|lat|lon|site', file=fp)
+    debugfp=open('tmp','w')
     for line in mega_listing:
+        print(line,file=debugfp)
         # Look for lines like this:
         # &nbsp;11.1km SE 135&#x00B0; <a href="article.php?sid=3387">Melgum NW</a> Stone Circle (<i>NJ471053</i>)<br>
-        m = re.search(r'article.php\?sid=[^"]*">(.*)</a> (.*) \(<i>(.*)</i>\)', line)
+        m = re.search(r'article.php\?sid=[^"]*">(.*)</a>[ \*]*(.*) \(<i>(.*)</i>\)', line)
         if m:
             latlon = osgr.parseOSGR(m.group(3)).toLatLon()
             print('%s|%f|%f|%s (%s)' % (m.group(3), latlon[0], latlon[1], m.group(1), m.group(2)), file=fp)
+            print('%s|%f|%f|%s (%s)' % (m.group(3), latlon[0], latlon[1], m.group(1), m.group(2)), file=debugfp)
