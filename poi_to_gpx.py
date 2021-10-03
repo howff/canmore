@@ -146,6 +146,7 @@ def kml_footer():
 
 # ref_no|name|pointx_class|feature_easting|feature_northing|pos_accuracy|uprn|topo_toid|topo_toid_version|usrn|usrn_mi|distance|address_detail|street_name|locality|geographic_county|postcode|admin_boundary|telephone_number|url|brand|qualifier_type|qualifier_data|provenance|supply_date
 
+print('Writing %s' % gpx_file)
 ofd = open(gpx_file, 'w')
 
 gpx_header(ofd)
